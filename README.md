@@ -42,6 +42,16 @@ The project involved website development, custom functionality, third-party serv
 - Search engine indexing management.
 - Website content and structure improvements.
 
+### 5. Multi-step Form Functionality
+
+Implemented custom JavaScript functionality for a two-step lead generation form.
+
+- Dynamic form step transitions.
+- User input validation.
+- Minimum debt amount validation.
+- DOM manipulation and event handling.
+- Conditional display of contact information fields.
+
 ## System Architecture
 
 The lead processing workflow connects website forms, custom PHP functionality, external automation services, and notification channels.
