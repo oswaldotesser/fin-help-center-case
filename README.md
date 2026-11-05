@@ -1,4 +1,4 @@
-# Fin Help Center — Web Platform & Lead Automation
+# Fin Help Center — Web Platform & Lead Automation 
 
 A WordPress-based lead generation platform with custom form processing, webhook integrations, automated notifications, and conversion tracking.
 
