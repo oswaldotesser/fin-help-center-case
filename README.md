@@ -52,6 +52,17 @@ Implemented custom JavaScript functionality for a two-step lead generation form.
 - DOM manipulation and event handling.
 - Conditional display of contact information fields.
 
+### 6. Conversion Tracking & Analytics
+
+Implemented custom JavaScript conversion tracking with Yandex Metrica.
+
+- CTA click tracking for multiple website sections.
+- Successful Contact Form 7 submission tracking.
+- Conversion goal delivery with callback-based redirection.
+- Fallback redirection if the analytics callback is unavailable.
+- Session-based access control for the thank-you page.
+- Browser Back/Forward Cache handling.
+
 ## System Architecture
 
 The lead processing workflow connects website forms, custom PHP functionality, external automation services, and notification channels.
