@@ -3,7 +3,7 @@
  * Multi-step lead generation form
  *
  * Handles the transition between two form steps
- * based on the selected debt amount.
+ * based on the selected debt amount. 
  */
 
 document.addEventListener('DOMContentLoaded', function () {
