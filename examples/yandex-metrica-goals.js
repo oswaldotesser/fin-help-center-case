@@ -3,40 +3,56 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Replace with your Yandex Metrica counter ID
   const METRIKA_ID = 12345678;
+  const CF7_FORM_ID = '7';
+
+  let redirectTimer = null;
+  let redirectStarted = false;
 
   // =========================
   // CTA buttons
   // =========================
 
-  const topBtn = document.getElementById('cta_top');
-  const middleBtn = document.getElementById('cta_middle');
-  const bottomBtn = document.getElementById('cta_bottom');
+  const ctaButtons = [
+    { id: 'cta_top', goal: 'cta_top' },
+    { id: 'cta_middle', goal: 'cta_middle' },
+    { id: 'cta_bottom', goal: 'cta_bottom' }
+  ];
 
-  if (topBtn) {
-    topBtn.addEventListener('click', function () {
-      if (typeof ym === 'function') {
-        ym(METRIKA_ID, 'reachGoal', 'cta_top');
-        console.log('goal cta_top sent');
-      }
-    });
-  }
+  ctaButtons.forEach(function (button) {
 
-  if (middleBtn) {
-    middleBtn.addEventListener('click', function () {
-      if (typeof ym === 'function') {
-        ym(METRIKA_ID, 'reachGoal', 'cta_middle');
-        console.log('goal cta_middle sent');
-      }
-    });
-  }
+    const element = document.getElementById(button.id);
 
-  if (bottomBtn) {
-    bottomBtn.addEventListener('click', function () {
-      if (typeof ym === 'function') {
-        ym(METRIKA_ID, 'reachGoal', 'cta_bottom');
-        console.log('goal cta_bottom sent');
-      }
-    });
+    if (element) {
+      element.addEventListener('click', function () {
+
+        if (typeof ym === 'function') {
+          ym(METRIKA_ID, 'reachGoal', button.goal);
+          console.log('Goal triggered:', button.goal);
+        }
+
+      });
+    }
+
+  });
+
+
+  // =========================
+  // Thank-you page redirect
+  // =========================
+
+  function redirectToThankYouPage() {
+
+    if (redirectStarted) {
+      return;
+    }
+
+    redirectStarted = true;
+
+    if (redirectTimer !== null) {
+      clearTimeout(redirectTimer);
+    }
+
+    window.location.href = '/spasibo/';
   }
 
 
@@ -44,7 +60,15 @@ document.addEventListener('DOMContentLoaded', function () {
   // CF7 successful submission
   // =========================
 
-  document.addEventListener('wpcf7mailsent', function () {
+  document.addEventListener('wpcf7mailsent', function (event) {
+
+    // Process only the specified Contact Form 7 form.
+    if (
+      !event.detail ||
+      String(event.detail.contactFormId) !== CF7_FORM_ID
+    ) {
+      return;
+    }
 
     console.log('CF7 form successfully sent');
 
@@ -55,24 +79,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
       ym(METRIKA_ID, 'reachGoal', 'form_submit', {}, function () {
 
-        console.log('goal form_submit sent');
+        console.log('Goal form_submit sent');
 
         // Redirect after the Metrica callback
-        window.location.href = '/spasibo/';
+        redirectToThankYouPage();
+
       });
 
       // Fallback redirect if the callback does not fire
-      setTimeout(function () {
-        if (window.location.pathname !== '/spasibo/' &&
-            window.location.pathname !== '/spasibo') {
-          window.location.href = '/spasibo/';
-        }
+      redirectTimer = setTimeout(function () {
+        redirectToThankYouPage();
       }, 2000);
 
     } else {
 
       // Redirect even if Yandex Metrica is unavailable
-      window.location.href = '/spasibo/';
+      redirectToThankYouPage();
+
     }
 
   }, false);
@@ -105,6 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Block direct access without successful submission
       window.location.replace('/');
+
     }
   }
 
@@ -113,9 +137,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Recheck only when the page is restored from BFCache
   window.addEventListener('pageshow', function (event) {
+
     if (event.persisted) {
       protectThankYouPage();
     }
+
   });
 
 });
