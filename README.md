@@ -15,6 +15,7 @@ The project involved website development, custom functionality, third-party serv
 ## Key Features & Implementation
 
 ### 1. WordPress Development
+
 - Website configuration and customization.
 - Custom functionality using PHP and JavaScript.
 - WordPress code customization through WPCode.
@@ -22,25 +23,27 @@ The project involved website development, custom functionality, third-party serv
 - Frontend customization using HTML, CSS, and JavaScript.
 
 ### 2. Form Processing & Automation
+
 - Contact Form 7 form configuration.
 - Custom PHP integration using WordPress hooks.
-- Webhook integration with Make.
+- HTTP-based webhook integration with Make.
 - Automated lead data transfer using JSON payloads.
 - Telegram notifications through Make.
-- Email notifications.
+- Separate email notifications through Contact Form 7.
 
 ### 3. Conversion Tracking & Analytics
 
 Implemented custom JavaScript conversion tracking with Yandex Metrica.
 
-- CTA click tracking for multiple website sections.
+- CTA click tracking across multiple website sections.
 - Successful Contact Form 7 submission tracking.
 - Conversion goal delivery with callback-based redirection.
 - Fallback redirection if the analytics callback is unavailable.
-- Session-based access control for the thank-you page.
-- Browser Back/Forward Cache handling.
+- Session-based client-side access check for the thank-you page.
+- Browser Back/Forward Cache (BFCache) handling.
 
 ### 4. SEO & Website Optimization
+
 - On-page SEO optimization.
 - Internal linking structure.
 - Search engine indexing management.
@@ -72,13 +75,14 @@ flowchart TD
     G --> H["Make Automation"]
     H --> I["Telegram Notifications"]
 
-    C --> J["Email Notifications"]
-
-    D --> K["HTTP Response Handling"]
+    G --> J["HTTP Response"]
+    J --> K["Response Status Validation"]
     K --> L["WordPress Debug Log"]
 
-    B --> M["Yandex Metrica"]
-    M --> N["Goals & Conversion Analytics"]
+    C --> M["Email Notifications"]
+
+    B --> N["Yandex Metrica"]
+    N --> O["Goals & Conversion Analytics"]
 ```
 
 ## Custom PHP Integration
@@ -87,17 +91,20 @@ flowchart TD
 
 Implemented a custom PHP integration using the `wpcf7_before_send_mail` WordPress hook.
 
-The integration processes form submissions and transfers lead data to Make through an HTTP POST request.
+The integration processes submissions from a specific Contact Form 7 form and transfers lead data to Make through an HTTP POST request.
 
 **Implementation details:**
+
 - Form-specific submission handling.
 - Extraction of submitted form fields.
-- Input normalization and validation.
-- JSON payload generation.
+- Input normalization and sanitization.
+- Required field validation.
+- HTTPS webhook URL validation.
+- JSON payload generation and encoding validation.
 - HTTP requests using WordPress `wp_remote_post()`.
 - HTTP response status validation.
-- Error handling through `WP_Error` checks.
-- Logging of connection and HTTP errors.
+- Transport error handling through `WP_Error` checks.
+- Logging of successful requests and errors.
 
 ### JSON Payload Structure
 
@@ -116,7 +123,9 @@ The integration transfers the following data:
 - Webhook URL stored separately in `wp-config.php`.
 - Production credentials excluded from the repository.
 - Required field validation before external requests.
+- HTTPS validation for the webhook URL.
 - Separate handling of transport errors and HTTP response errors.
+- Sanitized code examples and configuration templates provided.
 
 ## Technology Stack
 
@@ -138,8 +147,11 @@ The integration transfers the following data:
 The custom integration distinguishes between:
 
 - Successful HTTP responses (2xx).
-- HTTP client and server errors (4xx / 5xx).
+- HTTP error responses (4xx / 5xx).
 - WordPress transport errors (`WP_Error`).
+- Missing or invalid webhook configuration.
+- Missing required form fields.
+- JSON encoding errors.
 
 Diagnostic messages are recorded in the WordPress debug log.
 
@@ -148,7 +160,7 @@ Diagnostic messages are recorded in the WordPress debug log.
 - WordPress customization and troubleshooting.
 - PHP development and backend integration.
 - JavaScript and frontend customization.
-- REST/HTTP-based service integration.
+- HTTP-based service integration.
 - Webhook-based data exchange.
 - JSON payload processing.
 - Business process automation.
