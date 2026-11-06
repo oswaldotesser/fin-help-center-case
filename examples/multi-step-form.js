@@ -3,7 +3,7 @@
  * Multi-step lead generation form
  *
  * Handles the transition between two form steps
- * based on the selected debt amount. 
+ * based on the selected debt amount.
  */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -23,10 +23,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // Handle the transition to the second step.
     nextBtn.addEventListener('click', function () {
 
-      const debt = parseInt(debtInput.value, 10);
+      const debtValue = debtInput.value.trim();
+      const debt = Number(debtValue);
 
       // Validate the selected debt amount.
-      if (isNaN(debt) || debt < 10000) {
+      if (
+        debtValue === '' ||
+        !Number.isFinite(debt) ||
+        debt < 10000
+      ) {
         debtInput.focus();
         return;
       }
