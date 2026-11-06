@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -22,7 +23,17 @@ function send_cf7_to_make($contact_form) {
         return;
     }
 
-    $webhook_url = FIN_HELP_MAKE_WEBHOOK_URL;
+    $webhook_url = trim(FIN_HELP_MAKE_WEBHOOK_URL);
+
+    // Validate webhook URL.
+    if (
+        $webhook_url === '' ||
+        !wp_http_validate_url($webhook_url) ||
+        wp_parse_url($webhook_url, PHP_URL_SCHEME) !== 'https'
+    ) {
+        error_log('MAKE configuration error: invalid webhook URL');
+        return;
+    }
 
     // Get form submission.
     $submission = WPCF7_Submission::get_instance();
@@ -72,13 +83,21 @@ function send_cf7_to_make($contact_form) {
         'sent_at'   => current_time('mysql'),
     ];
 
+    // Encode payload as JSON.
+    $json_payload = wp_json_encode($payload);
+
+    if ($json_payload === false) {
+        error_log('MAKE error: failed to encode JSON payload');
+        return;
+    }
+
     // Send HTTP POST request to Make.
     $response = wp_remote_post($webhook_url, [
         'timeout' => 20,
         'headers' => [
             'Content-Type' => 'application/json',
         ],
-        'body' => wp_json_encode($payload),
+        'body' => $json_payload,
     ]);
 
     // Handle connection errors.
@@ -103,3 +122,4 @@ function send_cf7_to_make($contact_form) {
 
     }
 }
+
