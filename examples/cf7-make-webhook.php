@@ -2,7 +2,7 @@
 <?php
 
 /**
- * Contact Form 7 → Make Webhook Integration
+ * Contact Form 7 → Make Webhook Integration 
  *
  * Sends validated form submissions to Make via HTTP POST.
  * Webhook URL is stored separately in wp-config.php.
