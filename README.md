@@ -2,7 +2,7 @@
 
 A WordPress-based lead generation platform with custom form processing, webhook integrations, automated notifications, and conversion tracking.
 
-## Project Overview
+## Project Overview 
 
 Fin Help Center is a web platform designed to attract potential clients interested in legal consultation services.
 
