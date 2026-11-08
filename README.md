@@ -155,7 +155,7 @@ The custom integration distinguishes between:
 
 Diagnostic messages are recorded in the WordPress debug log.
 
-## Technical Skills & Competencies
+## Technical Implementation
 
 - WordPress customization and troubleshooting.
 - PHP development and backend integration.
